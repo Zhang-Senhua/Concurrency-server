@@ -12,3 +12,4 @@ AutoLock::~AutoLock()
 {
     m_mutex->unlock();
 }
+//锁机制
