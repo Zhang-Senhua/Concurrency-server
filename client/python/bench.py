@@ -42,12 +42,13 @@ class ClientThread(threading.Thread):
 
     def run(self):
         start_time = time.time()
-
-        host = '127.0.0.1'
-        port = 8080
-
-        client = socket.socket()  # 创建TCP/IP套接字
-        client.connect((host, port))  # 主动初始化TCP服务器连接
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.connect(('192.168.1.144', 8080))
+        # host = '192.168.1.144'
+        # port = 8080
+        # 不知道为什么使用以下代码会出错
+        # client = socket.socket()  # 创建TCP/IP套接字
+        # client.connect((host, port))  # 主动初始化TCP服务器连接
 
         # 建立连接消耗的时间
         conn_time = time.time()
@@ -57,9 +58,7 @@ class ClientThread(threading.Thread):
 
         # 请求响应消耗的时间
         resp_time = time.time()
-
         client.close()
-
         close_time = time.time()
         conn_time_cost = round((conn_time - start_time) * 1000, 3)
         req_time_cost = round((resp_time - conn_time) * 1000, 3)
@@ -117,15 +116,12 @@ if __name__ == '__main__':
         os.remove(log_file)
 
     create_log(log_file)
-
     base_path = os.path.dirname(os.path.dirname(log_dir))
     base_path = os.path.abspath(base_path)
     config = configparser.ConfigParser()
-    config.read(base_path + '/config/main.ini')
-
+    config.read('main.ini')
     threads = config['client']['threads']
     threads = int(threads)
-
     start = time.time()
     thread_list = list()
     for i in range(threads):
