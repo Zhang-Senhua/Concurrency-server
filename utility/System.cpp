@@ -56,6 +56,7 @@ void System::init()
 void System::core_dump()
 {
     // core dump
+    //定位问题
     struct rlimit x;
     int ret = getrlimit(RLIMIT_CORE, &x);
     x.rlim_cur = x.rlim_max;

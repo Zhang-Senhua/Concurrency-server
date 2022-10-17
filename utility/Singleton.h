@@ -14,7 +14,6 @@ public:
             instance = new T();
         return instance;
     }
-
 protected:
     Singleton() {}
     Singleton(const Singleton<T> &);
