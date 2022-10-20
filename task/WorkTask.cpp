@@ -81,6 +81,7 @@ void WorkTask::run()
 
     char buf[recv_buff_size];
     memset(buf, 0, recv_buff_size);
+    //接收到的数据
     len = socket->recv(buf, msg_head.len);
     if (len == -1 && errno == EAGAIN)
     {
@@ -109,6 +110,7 @@ void WorkTask::run()
 
     info("recv msg body len: %d, msg data: %s", len, buf);
 
+    //建立工作流对象
     Workflow * workflow = Singleton<Workflow>::instance();
 
     ostringstream os;
@@ -119,7 +121,9 @@ void WorkTask::run()
 
     workflow->run(work, input, output);
 
+    //发送函数
     socket->send(output.c_str(), output.length());
+
     handler->attach(socket);
 }
 

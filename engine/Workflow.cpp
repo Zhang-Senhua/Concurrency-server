@@ -71,7 +71,7 @@ bool Workflow::run(const string &work, const string &input, string &output)
         error("work: %s is switch off!", work.c_str());
         return false;
     }
-
+  //  线程的上下文 context 
     Context ctx;
     ctx.ref<string>("input") = input;
     if (!it->second->run(ctx))

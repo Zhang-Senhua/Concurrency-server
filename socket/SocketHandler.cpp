@@ -44,7 +44,7 @@ void SocketHandler::attach(Socket * socket)
     AutoLock lock(&m_mutex);
     m_epoll->add(socket->m_sockfd, (void *)socket, (EPOLLONESHOT | EPOLLIN | EPOLLHUP | EPOLLERR));
 }
-
+ 
 void SocketHandler::detach(Socket * socket)
 {
     AutoLock lock(&m_mutex);

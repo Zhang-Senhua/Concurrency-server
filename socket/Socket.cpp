@@ -9,7 +9,7 @@ using namespace yazi::socket;
 using namespace std;
 
 
-Socket::Socket() : m_sockfd(0)
+Socket::Socket() : m_sockfd(0)//:单冒号初始化列表
 {
 }
 

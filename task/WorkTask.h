@@ -11,7 +11,7 @@ namespace task {
 
 struct MsgHead {
     char flag[8];
-    uint32_t cmd;
+    uint32_t cmd; //包含通信协议的cmd
     uint32_t len;
 };
 
