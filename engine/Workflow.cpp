@@ -15,6 +15,7 @@ Workflow::Workflow()
 
 Workflow::~Workflow()
 {
+    //迭代器
     for (map<string, Work *>::iterator it = m_works.begin(); it != m_works.end(); ++it)
     {
         delete it->second;
@@ -28,7 +29,8 @@ bool Workflow::load(const string &workinfo)
     Document doc;
     doc.load_file(workinfo);
     Element root = doc.parse();
-    info("load workflow success: %s", workinfo.c_str());
+    printf("load workflow success: %s", workinfo.c_str());
+  //  printf(workinfo.c_str());
 
     for (Element::iterator it = root.begin(); it != root.end(); it++)
     {
