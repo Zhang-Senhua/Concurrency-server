@@ -9,9 +9,12 @@ using namespace yazi::utility;
 #include "Server.h"
 using namespace yazi::server;
 
+#include<stdio.h>
+
 
 int main()
 {
+    // 系统的初始化
     System * sys = Singleton<System>::instance();
     sys->init();
 
@@ -32,3 +35,15 @@ int main()
 
     return 0;
 }
+//对于单例模式的使用
+// Do not use a Singleton if:
+
+// If you want to save memory
+// If you want to try something new
+// If you want to show off how much you know
+// Because everyone else is doing it (See cargo cult programmer in wikipedia)
+// In user interface widgets
+// It is supposed to be a cache
+// In strings
+// In Sessions
+// I can go all day long
