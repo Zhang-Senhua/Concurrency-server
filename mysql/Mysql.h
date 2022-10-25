@@ -12,6 +12,10 @@ class Mysql
     */
 private:
     MYSQL* My_conn=nullptr;
+    MYSQL_RES* My_result=nullptr;
+    MYSQL_ROW My_row=nullptr;
+    void freeResult(); //需要对结果集的内存进行手动释放
+
 
     /* data */
 public:
