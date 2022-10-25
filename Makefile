@@ -18,7 +18,7 @@ INCLUDE_TEMP = $(shell find ./* -type d | grep -v '\.svn' | grep -v '\./plugin' 
 INCLUDE = $(patsubst %,-I %, $(INCLUDE_TEMP))
 $(warning INCLUDE is ${INCLUDE})
 
-LDFLAG = -lpthread -std=c++11
+LDFLAG = -lpthread -std=c++11  -ljsoncpp 
 
 #主程序
 SRC_MAIN = main.cpp
