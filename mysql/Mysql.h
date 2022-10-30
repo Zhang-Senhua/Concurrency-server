@@ -1,13 +1,11 @@
 #include "/usr/include/mysql/mysql.h"
 #include<iostream>
+#include<chrono>
 using namespace std;
+using namespace chrono;
 class Mysql
 {
     /*封装mysql类
-    
-
-   
-  
     5.查询数据库
     */
 private:
@@ -15,8 +13,7 @@ private:
     MYSQL_RES* My_result=nullptr;
     MYSQL_ROW My_row=nullptr;
     void freeResult(); //需要对结果集的内存进行手动释放
-
-
+    steady_clock::time_point m_alivetime;
     /* data */
 public:
 //1.初始化数据库连接
@@ -38,6 +35,10 @@ public:
     bool Mysql_commit();
 //9.事务回滚
     bool Mysql_rollback();
+//10.刷新起始的系统时间点
+    void refreshAlivetime();
+    long long getAliveTime();
+
 
 };
 
