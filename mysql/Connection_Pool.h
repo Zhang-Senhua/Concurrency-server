@@ -18,19 +18,19 @@ private:
     int m_timeout;
     int m_maxIdleTime;
     queue<Mysql*>My_connectionQ;//使用队列存储连接池
-    mutex m_mutexQ;
+    mutex m_mutexQ;//锁
     condition_variable m_cond;
     bool pareJsonFile();
+    void producerConnection();
+    void recyclerConnection();
+    void addConnection();
 public:
     Connection_Pool(/* args */);
     ~Connection_Pool();
     static Connection_Pool* getConnectPool();
+    shared_ptr<Mysql> getConect();
+
 };
 
-Connection_Pool::Connection_Pool(/* args */)
-{
-}
 
-Connection_Pool::~Connection_Pool()
-{
-}
+

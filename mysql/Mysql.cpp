@@ -53,10 +53,17 @@ bool Mysql::Mysql_next()
     if(My_result !=nullptr)
     {
          My_row=mysql_fetch_row(My_result);
-        return false;
+         if(My_row!=nullptr)
+         {
+            return true;
+         }
 
+
+    }else
+    {
+            return false;
     }
-    return true;
+
 }
 
 string Mysql::Value(int index)
@@ -93,5 +100,19 @@ void Mysql::freeResult()
         mysql_free_result(My_result);
         My_result=nullptr;
     }
+
+}
+
+
+void Mysql::refreshAlivetime()
+{
+    m_alivetime=steady_clock::now();
+
+}
+long long Mysql::getAliveTime()
+{
+    nanoseconds res=steady_clock::now()-m_alivetime;
+    milliseconds millsec=duration_cast<milliseconds>(res);
+    return millsec.count();
 
 }
