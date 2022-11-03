@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import socket
 import threading
 import struct
@@ -43,17 +44,13 @@ class ClientThread(threading.Thread):
     def run(self):
         start_time = time.time()
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect(('192.168.1.144', 8080))
-        # host = '192.168.1.144'
-        # port = 8080
-        # 不知道为什么使用以下代码会出错
-        # client = socket.socket()  # 创建TCP/IP套接字
-        # client.connect((host, port))  # 主动初始化TCP服务器连接
+        client.connect(('127.0.0.1', 18080))
+        
 
         # 建立连接消耗的时间
         conn_time = time.time()
 
-        self.send_data_1(client, f'{self.name}: hello python')
+        self.send_data_1(client, '{self.name}: hello python')
         # self.send_data(client, f'{self.name}: so far so good!')
 
         # 请求响应消耗的时间
@@ -63,12 +60,12 @@ class ClientThread(threading.Thread):
         conn_time_cost = round((conn_time - start_time) * 1000, 3)
         req_time_cost = round((resp_time - conn_time) * 1000, 3)
         total_time_cost = round((close_time - start_time) * 1000, 3)
-        logging.info(f'conn_time={conn_time_cost}ms req_time_cost={req_time_cost}ms total_time_cost={total_time_cost}ms')
+        logging.info('conn_time={conn_time_cost}ms req_time_cost={req_time_cost}ms total_time_cost={total_time_cost}ms')
     
     def send_data_1(self, client, data):
         cmd = 1
         data_len = len(data)
-        data = struct.pack(f'8sII{data_len}s', b'work', cmd, data_len, data.encode('utf-8'))
+        data = struct.pack('8sII{data_len}s', b'work', cmd, data_len, data.encode('utf-8'))
         client.send(data)  # 发送TCP数据
         info = client.recv(1024).decode()
         # print(info)
@@ -105,7 +102,7 @@ def stat(log_file):
             total_time += total_time_cost
         else:
             break
-    print(f'连接耗时={round(total_conn_time / total, 3)}ms, 请求耗时={round(total_req_time / total, 3)}ms, 总共耗时={round(total_time / total, 3)}ms')
+    print('连接耗时={round(total_conn_time / total, 3)}ms, 请求耗时={round(total_req_time / total, 3)}ms, 总共耗时={round(total_time / total, 3)}ms')
 
 
 if __name__ == '__main__':
@@ -125,14 +122,14 @@ if __name__ == '__main__':
     start = time.time()
     thread_list = list()
     for i in range(threads):
-        thread = ClientThread(f'thread{i}')
+        thread = ClientThread('thread{i}')
         thread_list.append(thread)
         thread.start()
     
     for thread in thread_list:
         thread.join()
     total_time = round((time.time() - start), 3)
-    print(f'thread finished, total time cost: {total_time}s')
+    print('thread finished, total time cost: {total_time}s')
 
     # 统计每个请求的平均耗时
     stat(log_file)
