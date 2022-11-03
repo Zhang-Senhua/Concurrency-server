@@ -25,7 +25,7 @@ void TaskDispatcher::assign(Task* task)
     m_mutex.lock();
     m_tasks.push_back(task);
     m_mutex.unlock();
-    m_cond.signal();
+    m_cond.signal();//发出信号，发生变化，通知唤醒阻塞的地方
 }
 
 void TaskDispatcher::handle(Task* task)
@@ -39,7 +39,7 @@ void TaskDispatcher::handle(Task* task)
     else
     {
         m_mutex.lock();
-        m_tasks.push_front(task);
+        m_tasks.push_front(task); //繁忙将任务重新入队列
         m_mutex.unlock();
         debug("all threads are busy!");
     }
@@ -62,10 +62,10 @@ void TaskDispatcher::run()
     {
         //debug("task list: %d", m_actions.size());
         m_mutex.lock();
-        while (m_tasks.empty())
-            m_cond.wait(&m_mutex);
+        while (m_tasks.empty()) //m_tasks是父对象thread的变量
+            m_cond.wait(&m_mutex);//使用条件变量进行阻塞，条件发生变化时被唤醒，不用一直加锁解锁
         Task* task = m_tasks.front();
-        m_tasks.pop_front();
+        m_tasks.pop_front();//从前面弹出元素（删除）
         m_mutex.unlock();
         handle(task);
     }

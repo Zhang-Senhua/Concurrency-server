@@ -14,7 +14,7 @@ public:
     Thread();
     virtual ~Thread();
 
-    virtual void run() = 0;
+    virtual void run() = 0; //纯虚函数，子类重写该函数
 
     void start();
     void stop();

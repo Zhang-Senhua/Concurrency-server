@@ -108,7 +108,7 @@ void SocketHandler::handle(int max_connections, int wait_time)
                 {
                     debug("socket read event");
                     detach(socket);
-                    Task * task = TaskFactory::create(socket);
+                    Task * task = TaskFactory::create(socket); //任务工厂
                     Singleton<TaskDispatcher>::instance()->assign(task);
                 }
             }

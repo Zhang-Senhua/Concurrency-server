@@ -34,6 +34,7 @@ void Server::start()
     SocketHandler * socket_handler = Singleton<SocketHandler>::instance();
     socket_handler->listen(m_ip, m_port);
     socket_handler->handle(m_connects, m_wait_time);
+    
 }
 
 void Server::set_threads(int threads)

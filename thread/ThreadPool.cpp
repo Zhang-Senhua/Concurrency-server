@@ -7,6 +7,7 @@ using namespace yazi::thread;
 
 ThreadPool::ThreadPool() : m_threads(0)
 {
+    
 }
 
 ThreadPool::~ThreadPool()
@@ -19,7 +20,7 @@ void ThreadPool::create(int threads)
     m_threads = threads;
     for (int i = 0; i < threads; i++)
     {
-        Thread* thread = new WorkerThread();
+        Thread* thread = new WorkerThread(); //chaungjian
         debug("create thread %x", thread);
         m_list_idle.insert(thread);
         thread->start();
@@ -40,7 +41,6 @@ void ThreadPool::move_to_idle_list(Thread *thread)
     m_list_idle.insert(thread);
     m_cond_idle.signal();
     m_mutex_idle.unlock();
-
     m_mutex_busy.lock();
     std::set<Thread *>::iterator it = m_list_busy.find(thread);
     if (it != m_list_busy.end())
@@ -56,7 +56,6 @@ void ThreadPool::move_to_busy_list(Thread* thread)
         m_cond_busy.wait(&m_mutex_busy);
     m_list_busy.insert(thread);
     m_mutex_busy.unlock();
-
     m_mutex_idle.lock();
     std::set<Thread *>::iterator it = m_list_idle.find(thread);
     if (it != m_list_idle.end())
@@ -96,3 +95,4 @@ void ThreadPool::assign(Task *task)
         error("thread is null, assign a task failed");
     }
 }
+
