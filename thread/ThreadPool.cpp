@@ -20,7 +20,7 @@ void ThreadPool::create(int threads)
     m_threads = threads;
     for (int i = 0; i < threads; i++)
     {
-        Thread* thread = new WorkerThread(); //chaungjian
+        Thread* thread = new WorkerThread(); //
         debug("create thread %x", thread);
         m_list_idle.insert(thread);
         thread->start();

@@ -1,5 +1,6 @@
 #include "WorkTask.h"
 
+#include "mysql/Connection_Pool.h"
 #include "Logger.h"
 #include "Singleton.h"
 using namespace yazi::utility;
@@ -15,8 +16,7 @@ using namespace yazi::task;
 #include <sstream>
 using std::ostringstream;
 
-
-WorkTask::WorkTask(Socket * socket) : Task(socket)
+WorkTask::WorkTask(Socket *socket) : Task(socket)
 {
 }
 
@@ -27,9 +27,9 @@ WorkTask::~WorkTask()
 void WorkTask::run()
 {
     debug("work task run");
-    SocketHandler * handler = Singleton<SocketHandler>::instance();
+    SocketHandler *handler = Singleton<SocketHandler>::instance();
 
-    Socket * socket = static_cast<Socket *>(m_data);
+    Socket *socket = static_cast<Socket *>(m_data);
 
     MsgHead msg_head;
     memset(&msg_head, 0, sizeof(msg_head));
@@ -111,16 +111,20 @@ void WorkTask::run()
     info("recv msg body len: %d, msg data: %s", len, buf);
 
     //建立工作流对象
-    Workflow * workflow = Singleton<Workflow>::instance();
-
+    Workflow *workflow = Singleton<Workflow>::instance();
+    // DATA解析出的数据
+    Connection_Pool *Con_Pool = Singleton<Connection_Pool>::instance();
     ostringstream os;
     os << (int)(msg_head.cmd);
     const string work = os.str();
     const string input = buf;
     string output;
-
+    string QUERY_CMD;
+    //获取连接
+    shared_ptr<Mysql> Mysql_CON = Con_Pool->getConect();
+    //插入数据
+    Mysql_CON->Mysql_query(QUERY_CMD);
     workflow->run(work, input, output);
-
     //发送函数
     socket->send(output.c_str(), output.length());
 
