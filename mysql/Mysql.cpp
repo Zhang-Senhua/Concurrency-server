@@ -15,10 +15,11 @@ Mysql::~Mysql()
     freeResult();
 }
 
-bool Mysql::Mysql_conn(string user, string passwd, string dbName, string ip, unsigned short port = 3306)
+bool Mysql::Mysql_conn(string user, string passwd, string dbName,
+                       string ip, unsigned short port)
 {
-
-    MYSQL *ptr = mysql_real_connect(My_conn, ip.c_str(), user.c_str(), passwd.c_str(), dbName.c_str(), port, nullptr, 0);
+    MYSQL *ptr = mysql_real_connect(My_conn, ip.c_str(), user.c_str(), passwd.c_str(),
+                                    dbName.c_str(), 3306, nullptr, 0);
     return ptr != nullptr;
 }
 
