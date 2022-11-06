@@ -119,7 +119,7 @@ void WorkTask::run()
     const string work = os.str();
     const string input = buf;
     string output;
-    string QUERY_CMD;
+    string QUERY_CMD; //
     //获取连接
     shared_ptr<Mysql> Mysql_CON = Con_Pool->getConect();
     //插入数据
