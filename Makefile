@@ -18,7 +18,9 @@ INCLUDE_TEMP = $(shell find ./* -type d | grep -v '\.svn' | grep -v '\./plugin' 
 INCLUDE = $(patsubst %,-I %, $(INCLUDE_TEMP))
 $(warning INCLUDE is ${INCLUDE})
 
-LDFLAG = -lpthread -std=c++11  -ljsoncpp -lmysqlclient
+#数据库链接库
+#MYSQLLIB=$(shell 'mysql_config --cflags --libs')
+LDFLAG = -lpthread  -std=c++11  -ljsoncpp -lmysqlclient
 
 #主程序
 SRC_MAIN = main.cpp
@@ -27,10 +29,10 @@ EXE_MAIN = main
 
 target: ${EXE_MAIN}
 $(EXE_MAIN): $(OBJ_MAIN) $(OBJS)
-	$(CC) $(LDFLAG) -o $@ $^ $(CFLAGS) $(INCLUDE) 
+	$(CC) $(LDFLAG) -o $@  $^ $(CFLAGS) $(INCLUDE)  
 
 %.o: %.cpp
-	${CC} ${CFLAGS} ${INCLUDE} -c $< -o $@
+	${CC} $(LDFLAG) ${CFLAGS} ${INCLUDE} -c $< -o $@  
 
 # test 插件
 PULGIN_TEST = plugin/testplugin.so

@@ -1,4 +1,6 @@
 #include "Mysql.h"
+using namespace yazi::MYSql;
+
 Mysql::Mysql(/* args */)
 {
     My_conn = mysql_init(nullptr);
@@ -55,6 +57,7 @@ bool Mysql::Mysql_next()
         {
             return true;
         }
+        return false;
     }
     else
     {

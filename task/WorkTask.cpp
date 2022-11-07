@@ -1,6 +1,7 @@
 #include "WorkTask.h"
 
-#include "mysql/Connection_Pool.h"
+#include "../mysql/Connection_Pool.h"
+using namespace yazi::Conpool;
 #include "Logger.h"
 #include "Singleton.h"
 using namespace yazi::utility;

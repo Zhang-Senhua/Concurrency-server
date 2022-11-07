@@ -2,9 +2,10 @@
 #include <json/json.h>
 #include <fstream>
 #include <thread>
-#include "utility/Logger.h"
-using namespace yazi::utility;
+//#include <utility/Logger.h>
+// using namespace yazi::utility;
 using namespace Json;
+using namespace yazi::Conpool;
 
 Connection_Pool *Connection_Pool::getConnectPool()
 {
@@ -43,7 +44,7 @@ Connection_Pool::Connection_Pool(/* args */)
     {
         return;
     }
-    for (int i = 0; i < m_minsize; i++)
+    for (unsigned int i = 0; i < m_minsize; i++)
     {
         Mysql *connect = new Mysql;
         connect->Mysql_conn(m_user, m_passwd, m_dbName, m_ip, m_port);

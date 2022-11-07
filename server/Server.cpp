@@ -11,8 +11,10 @@ using namespace yazi::thread;
 #include "SocketHandler.h"
 using namespace yazi::socket;
 
-#include "mysql/Mysql.h"
-#include "mysql/Connection_Pool.h"
+#include "../mysql/Mysql.h"
+using namespace yazi::MYSql;
+#include "../mysql/Connection_Pool.h"
+using namespace yazi::Conpool;
 
 Server::Server() : m_ip(""), m_port(0), m_threads(1024), m_connects(1024), m_wait_time(10)
 {
