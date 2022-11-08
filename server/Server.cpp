@@ -1,7 +1,7 @@
 
 #include "Server.h"
 using namespace yazi::server;
-
+using namespace std;
 #include "Singleton.h"
 using namespace yazi::utility;
 
@@ -36,7 +36,7 @@ void Server::start()
     TaskDispatcher *dispatcher = Singleton<TaskDispatcher>::instance();
     dispatcher->init(m_threads);
 
-    // init the socket handler
+    // // init the socket handler
     SocketHandler *socket_handler = Singleton<SocketHandler>::instance();
     socket_handler->listen(m_ip, m_port);
     socket_handler->handle(m_connects, m_wait_time);
