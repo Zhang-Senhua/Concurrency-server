@@ -20,7 +20,7 @@ $(warning INCLUDE is ${INCLUDE})
 
 #数据库链接库
 #MYSQLLIB=$(shell 'mysql_config --cflags --libs')
-LDFLAG = -lpthread  -std=c++11  -ljsoncpp -lmysqlclient
+LDFLAG =  -L/usr/lib/mysql -lmysqlclient -lpthread  -std=c++11  -ljsoncpp 
 
 #主程序
 SRC_MAIN = main.cpp
@@ -29,7 +29,7 @@ EXE_MAIN = main
 
 target: ${EXE_MAIN}
 $(EXE_MAIN): $(OBJ_MAIN) $(OBJS)
-	$(CC) $(LDFLAG) -o $@  $^ $(CFLAGS) $(INCLUDE)  
+	$(CC)  $^  -o $@  $(CFLAGS) $(INCLUDE)  $(LDFLAG)
 
 %.o: %.cpp
 	${CC} $(LDFLAG) ${CFLAGS} ${INCLUDE} -c $< -o $@  
