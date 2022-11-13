@@ -2,6 +2,8 @@
 #include </usr/include/mysql/mysql.h>
 #include <iostream>
 #include <chrono>
+#include "Logger.h"
+using namespace yazi::utility;
 using namespace std;
 using namespace chrono;
 namespace yazi

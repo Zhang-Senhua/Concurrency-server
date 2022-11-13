@@ -21,7 +21,13 @@ bool Mysql::Mysql_conn(string user, string passwd, string dbName,
                        string ip, unsigned short port)
 {
     MYSQL *ptr = mysql_real_connect(My_conn, ip.c_str(), user.c_str(), passwd.c_str(),
+
                                     dbName.c_str(), 3306, nullptr, 0);
+    if (ptr == nullptr)
+    {
+        error("Creat Mysql connect failed!", errno);
+    }
+    debug("Creat Mysql connect Sucess");
     return ptr != nullptr;
 }
 
@@ -41,6 +47,7 @@ bool Mysql::Mysql_query(string sql_cmd)
     freeResult();
     if (mysql_query(My_conn, sql_cmd.c_str()))
     {
+        error("Mysql_query perform failed! ", errno);
         return false;
     }
     My_result = mysql_store_result(My_conn);

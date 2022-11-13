@@ -35,6 +35,7 @@ namespace yazi
         public:
             Connection_Pool(/* args */);
             ~Connection_Pool();
+            void init();
             static Connection_Pool *getConnectPool();
             shared_ptr<Mysql> getConect();
         };

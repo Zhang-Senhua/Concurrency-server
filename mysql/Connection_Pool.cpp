@@ -2,8 +2,8 @@
 #include <json/json.h>
 #include <fstream>
 #include <thread>
-//#include <utility/Logger.h>
-// using namespace yazi::utility;
+#include "Logger.h"
+using namespace yazi::utility;
 using namespace Json;
 using namespace yazi::Conpool;
 
@@ -14,7 +14,7 @@ Connection_Pool *Connection_Pool::getConnectPool()
 }
 bool Connection_Pool::pareJsonFile()
 {
-    ifstream ifs("dbconf.json");
+    ifstream ifs("mysql/dbconf.json");
     Reader rd;
     Value root;
     rd.parse(ifs, root);
@@ -39,17 +39,23 @@ bool Connection_Pool::pareJsonFile()
 
 Connection_Pool::Connection_Pool(/* args */)
 {
+}
+
+void Connection_Pool::init()
+{
     //加载配置文件
     if (!pareJsonFile())
     {
+        error("Connection_Pool pareJsonFile failed!");
         return;
     }
     for (unsigned int i = 0; i < m_minsize; i++)
     {
         Mysql *connect = new Mysql;
         connect->Mysql_conn(m_user, m_passwd, m_dbName, m_ip, m_port);
-        My_connectionQ.push(connect); //入队列
-                                      // debug("create thread %x");
+        My_connectionQ.push(connect);
+        //入队列
+        debug("create Mysql connect %d", i);
     }
     //生产者消费者模式，一个线程创建维护线程，一个消耗线程
     thread producer(&Connection_Pool::producerConnection, this);

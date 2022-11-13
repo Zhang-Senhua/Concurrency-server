@@ -14,7 +14,8 @@ using namespace yazi::utility;
 
 #include "Workflow.h"
 using namespace yazi::engine;
-
+#include "../mysql/Connection_Pool.h"
+using namespace yazi::Conpool;
 
 System::System()
 {
@@ -31,7 +32,7 @@ void System::init()
     m_root_path = get_root_path();
 
     const string logdir = m_root_path + "/log";
-    DIR * dp = opendir(logdir.c_str());
+    DIR *dp = opendir(logdir.c_str());
     if (dp == NULL)
     {
         mkdir(logdir.c_str(), 0755);
@@ -45,12 +46,18 @@ void System::init()
     Logger::instance()->open(m_root_path + "/log/main.log");
 
     // init inifile
-    IniFile * ini = Singleton<IniFile>::instance();
+    IniFile *ini = Singleton<IniFile>::instance();
     ini->load(get_root_path() + "/config/main.ini");
 
     // init workflow
-    Workflow * workflow = Singleton<Workflow>::instance();
+    Workflow *workflow = Singleton<Workflow>::instance();
     workflow->load(get_root_path() + "/config/workflow.xml");
+    debug("workflow load sucess!");
+    // init mysqlpool
+    Connection_Pool *Con_Pool = Singleton<Connection_Pool>::instance();
+
+    Con_Pool->init();
+    debug("Connection_Pool load sucess!");
 }
 
 void System::core_dump()
