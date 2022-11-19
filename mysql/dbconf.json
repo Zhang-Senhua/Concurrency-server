@@ -4,8 +4,8 @@
     "userName": "root",
     "password": "root",
     "dbName": "Radar",
-    "minSize": 10,
+    "minSize": 500,
     "maxSize": 1024,
     "maxIdleTime": 5000,
-    "timeout": 1000
+    "timeout": 5000
 }

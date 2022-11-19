@@ -27,7 +27,7 @@ bool Mysql::Mysql_conn(string user, string passwd, string dbName,
     {
         error("Creat Mysql connect failed!", errno);
     }
-    debug("Creat Mysql connect Sucess");
+    // debug("Creat Mysql connect Sucess");
     return ptr != nullptr;
 }
 

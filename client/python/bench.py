@@ -42,31 +42,30 @@ class ClientThread(threading.Thread):
 
     def run(self):
         start_time = time.time()
-
-        host = '192.168.1.178'
+        host = '192.168.1.144'
         port = 18080
-
         client = socket.socket()  # 创建TCP/IP套接字
         client.connect((host, port))  # 主动初始化TCP服务器连接
-
         # 建立连接消耗的时间
         conn_time = time.time()
-
-        self.send_data_1(client, f'{self.name}: hello python')
-        # self.send_data(client, f'{self.name}: so far so good!')
-
-        # 请求响应消耗的时间
-        resp_time = time.time()
-
+        resp_time = time.time()   
+        couter=0
+       
+        while (couter<1000):                  
+                  self.send_data_4(client)
+                  # self.send_data(client, f'{self.name}: so far so good!')
+                  # 请求响应消耗的时间
+                  couter=couter+1
+                  time.sleep(0.05)                    
+        
         client.close()
-
         close_time = time.time()
         conn_time_cost = round((conn_time - start_time) * 1000, 3)
         req_time_cost = round((resp_time - conn_time) * 1000, 3)
         total_time_cost = round((close_time - start_time) * 1000, 3)
         logging.info(f'conn_time={conn_time_cost}ms req_time_cost={req_time_cost}ms total_time_cost={total_time_cost}ms')
     
-    def send_data_1(self, client, data):
+    def send_data_1(self, client, ID):
         cmd = 1
         data_len = len(data)
         data = struct.pack(f'8sII{data_len}s', b'work', cmd, data_len, data.encode('utf-8'))
@@ -74,11 +73,30 @@ class ClientThread(threading.Thread):
         client.send(data)  # 发送TCP数据
         info = client.recv(1024).decode()
         # print(info)
+        
+    def send_data_3(self, client,id):
+        device_id=str(hex(id));
+        data = struct.pack('B2B10B', int('5a',16), int(device_id,16), int ('01',16), int('01',16),  int('2a',16),
+                           int('4a',16),int('4f',16),int('63',16),int('2c',16),int('43',16),int('0d',16),int('0a',16))
+        client.send(data)  # 发送TCP数据
+        # print(info)
+
 
     def send_data_2(self, client, data):
         client.send(data.encode('utf-8'))  # 发送TCP数据
         info = client.recv(1024).decode()
         # print(info)
+    def send_data_4(self,client):
+        device_id1=hex(99)
+        device_id2=hex(99)
+        data1 = struct.pack('13B', int('5a', 16), int(device_id1[2:], 16), int(device_id2[2:], 16), int('01', 16),
+                    int('01', 16), int('2a', 16),
+                    int('4a', 16), int('4f', 16), int('63', 16), int('2c', 16), int('43', 16), int('0d', 16),
+                    int('0a', 16))
+        client.send(data1)  # 发送TCP数据
+        
+        
+        
 
 
 def str_to_time(time_str):
@@ -111,18 +129,24 @@ def stat(log_file):
 
 
 if __name__ == '__main__':
-    log_dir = os.path.dirname(__file__)
+    log_dir = os.path.dirname(__file__) or '.'
     log_file = log_dir + '/test.log'
     if os.path.exists(log_file):
         # 删除旧的日志文件
         os.remove(log_file)
+    print(log_file)
 
     create_log(log_file)
 
     base_path = os.path.dirname(os.path.dirname(log_dir))
     base_path = os.path.abspath(base_path)
+    print(base_path)
     config = configparser.ConfigParser()
     config.read('main.ini')
+#     base_path = os.path.dirname(os.path.dirname(log_dir))
+#     base_path = os.path.abspath(base_path)
+#     config = configparser.ConfigParser()
+#     config.read('main.ini')
 
     threads = config['client']['threads']
     threads = int(threads)
@@ -136,8 +160,9 @@ if __name__ == '__main__':
     
     for thread in thread_list:
         thread.join()
+#阻塞的对象是主线程，可以达到控制主线程什么时候结束的作用。
     total_time = round((time.time() - start), 3)
     print(f'thread finished, total time cost: {total_time}s')
 
-    # 统计每个请求的平均耗时
+    #统计每个请求的平均耗时
     stat(log_file)

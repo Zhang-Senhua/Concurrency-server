@@ -7,7 +7,6 @@ using namespace yazi::thread;
 
 ThreadPool::ThreadPool() : m_threads(0)
 {
-    
 }
 
 ThreadPool::~ThreadPool()
@@ -20,14 +19,14 @@ void ThreadPool::create(int threads)
     m_threads = threads;
     for (int i = 0; i < threads; i++)
     {
-        Thread* thread = new WorkerThread(); //
-        debug("create thread %x", thread);
+        Thread *thread = new WorkerThread(); //
+                                             // debug("create thread %x", thread);
         m_list_idle.insert(thread);
         thread->start();
     }
 }
 
-Thread* ThreadPool::get_idle_thread()
+Thread *ThreadPool::get_idle_thread()
 {
     AutoLock lock(&m_mutex_idle);
     while (m_list_idle.size() == 0)
@@ -49,7 +48,7 @@ void ThreadPool::move_to_idle_list(Thread *thread)
     m_mutex_busy.unlock();
 }
 
-void ThreadPool::move_to_busy_list(Thread* thread)
+void ThreadPool::move_to_busy_list(Thread *thread)
 {
     m_mutex_busy.lock();
     while (m_list_busy.size() == (size_t)(m_threads))
@@ -84,7 +83,7 @@ void ThreadPool::assign(Task *task)
     }
     debug("assign a new task: %x to thread pool", task);
 
-    Thread* thread = get_idle_thread();
+    Thread *thread = get_idle_thread();
     if (thread != NULL)
     {
         move_to_busy_list(thread);
@@ -95,4 +94,3 @@ void ThreadPool::assign(Task *task)
         error("thread is null, assign a task failed");
     }
 }
-

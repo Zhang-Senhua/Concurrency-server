@@ -51,18 +51,18 @@ void WorkTask::run()
     // int len;
     //  memset(&msg_head, 0, sizeof(msg_head));
     int temp = sizeof(data_struct);
-    printf("%d", temp);
     int len = socket->recv((char *)(&data_struct), sizeof(data_struct)); //把帧头先读出来
     auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
     //转为字符串
     std::stringstream ss;
     ss << std::put_time(std::localtime(&t), "%Y-%m-%d-%H-%M-%S");
     log_time = ss.str();
-    device_id = data_struct.DATA[0];
-    on_bed = data_struct.DATA[1];
-    body_move = data_struct.DATA[2];
-    heart_rate = data_struct.DATA[3];
-    breath_rate = data_struct.DATA[4];
+    device_id = data_struct.DATA[0] << 8 | data_struct.DATA[1];
+    debug("设备ID%d", device_id);
+    on_bed = data_struct.DATA[2];
+    body_move = data_struct.DATA[3];
+    heart_rate = data_struct.DATA[4];
+    breath_rate = data_struct.DATA[5];
     if (len == 0)
     {
         error("socket closed by peer");
@@ -171,6 +171,6 @@ void WorkTask::run()
 
 void WorkTask::destroy()
 {
-    debug("work job destory");
+    // debug("work job destory");
     delete this;
 }

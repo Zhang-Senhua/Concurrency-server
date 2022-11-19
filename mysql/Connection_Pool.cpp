@@ -55,7 +55,7 @@ void Connection_Pool::init()
         connect->Mysql_conn(m_user, m_passwd, m_dbName, m_ip, m_port);
         My_connectionQ.push(connect);
         //入队列
-        debug("create Mysql connect %d", i);
+        // debug("create Mysql connect %d", i);
     }
     //生产者消费者模式，一个线程创建维护线程，一个消耗线程
     thread producer(&Connection_Pool::producerConnection, this);

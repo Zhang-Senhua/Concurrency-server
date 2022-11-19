@@ -5,8 +5,8 @@ using namespace yazi::thread;
 
 #include "Socket.h"
 using namespace yazi::socket;
-#define FRAME_LENGTH 12
-#define DATA_LENGTH 9
+#define FRAME_LENGTH 13
+#define DATA_LENGTH 10
 
 namespace yazi
 {

@@ -16,7 +16,7 @@ WorkerThread::~WorkerThread()
 {
 }
 
-void WorkerThread::cleanup(void* ptr)
+void WorkerThread::cleanup(void *ptr)
 {
     info("worker thread cleanup handler: %x", ptr);
 }
@@ -37,6 +37,7 @@ void WorkerThread::run()
     while (true)
     {
         // start wait for task
+        // debug("task was ready to run!!");
         m_mutex.lock();
         while (m_task == NULL)
             m_cond.wait(&m_mutex);
@@ -46,7 +47,7 @@ void WorkerThread::run()
         int rc = 0;
         int old_state = 0;
         rc = pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &old_state);
-
+        debug("task was run!!");
         m_task->run();
         m_task->destroy();
         m_task = NULL;
