@@ -83,7 +83,7 @@ void Connection_Pool::recyclerConnection()
     while (true)
     {
         this_thread::sleep_for(chrono::milliseconds(500));
-        unique_lock<mutex> locker(m_mutexQ); // loceker对象自动加解锁，封装后不需要手动进行加锁解锁的操作
+        lock_guard<mutex> locker(m_mutexQ); // loceker对象自动加解锁，封装后不需要手动进行加锁解锁的操作
         /* code */
         while (My_connectionQ.size() > m_minsize)
         {
@@ -126,8 +126,7 @@ shared_ptr<Mysql> Connection_Pool::getConect()
                                     {
         lock_guard<mutex> locker (m_mutexQ);
         conn->refreshAlivetime();
-        My_connectionQ.push(conn);
-         m_mutexQ.unlock(); });
+        My_connectionQ.push(conn); });
     My_connectionQ.pop();
     m_cond.notify_all();
     return valuable_conn;
