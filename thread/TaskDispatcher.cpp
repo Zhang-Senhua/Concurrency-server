@@ -21,7 +21,7 @@ void TaskDispatcher::init(int threads)
 
 void TaskDispatcher::assign(Task *task)
 {
-    // debug("task dispatcher assign task");
+    debug("task dispatcher assign task");
     m_mutex.lock();
     m_tasks.push_back(task);
     m_mutex.unlock();
@@ -47,6 +47,7 @@ void TaskDispatcher::handle(Task *task)
 
 void TaskDispatcher::run()
 {
+    debug("TaskDispatcher::run");
     sigset_t mask;
     if (0 != sigfillset(&mask))
     {
@@ -62,9 +63,14 @@ void TaskDispatcher::run()
     {
         // debug("task list: %d", m_actions.size());
         m_mutex.lock();
-        while (m_tasks.empty())    // m_tasks是父对象thread的变量
+        while (m_tasks.empty())
+        {
+            // m_tasks是父对象thread的变量
             m_cond.wait(&m_mutex); //使用条件变量进行阻塞，条件发生变化时被唤醒，不用一直加锁解锁
+            debug("wait for m_task!");
+        }
         Task *task = m_tasks.front();
+        debug("task pop!");
         m_tasks.pop_front(); //从前面弹出元素（删除）
         m_mutex.unlock();
         handle(task);

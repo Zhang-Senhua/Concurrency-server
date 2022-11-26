@@ -1,7 +1,8 @@
 #include "Thread.h"
 #include "AutoLock.h"
 using namespace yazi::thread;
-
+#include "Logger.h"
+using namespace yazi::utility;
 Thread::Thread() : m_tid(0), m_task(NULL)
 {
 }
@@ -16,7 +17,11 @@ void Thread::start()
     pthread_attr_init(&attr);
     pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-    pthread_create(&m_tid, &attr, thread_func, (void *)this);
+
+    if (pthread_create(&m_tid, &attr, thread_func, (void *)this))
+    {
+        debug("creat error!");
+    }
     pthread_attr_destroy(&attr);
 }
 
@@ -25,14 +30,15 @@ void Thread::stop()
     pthread_exit(PTHREAD_CANCELED);
 }
 
-void* Thread::thread_func(void* ptr)
+void *Thread::thread_func(void *ptr)
 {
-    Thread* thread = (Thread *)ptr;
+    Thread *thread = (Thread *)ptr;
+    // debug("调用子类taskdispatcher的run函数！");
     thread->run();
     return ptr;
 }
 
-void Thread::set_task(Task* task)
+void Thread::set_task(Task *task)
 {
     m_mutex.lock();
     m_task = task;
@@ -40,7 +46,7 @@ void Thread::set_task(Task* task)
     m_mutex.unlock();
 }
 
-Task* Thread::get_task()
+Task *Thread::get_task()
 {
     AutoLock lock(&m_mutex);
     return m_task;
