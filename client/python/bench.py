@@ -96,9 +96,7 @@ class ClientThread(threading.Thread):
         client.send(data1)  # 发送TCP数据
         
         
-        
-
-
+    
 def str_to_time(time_str):
     time_cost = time_str.split('=')[-1]
     time_cost = time_cost.replace('ms', '')
